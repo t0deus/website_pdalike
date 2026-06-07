@@ -84,60 +84,209 @@ const records = {
   }
 };
 
-const factions = {
-  stalkers: {
-    status: "нейтрально",
-    title: "Сталкеры",
-    text: "Одиночки, проводники и охотники за редкими находками. Живут слухами, тайниками и осторожностью.",
-    threat: "42%",
-    zone: "кордон",
-    image: "assets/faction-stalkers.png",
-    alt: "Сталкеры в зоне"
+const relationColumns = [
+  "Одиночки",
+  "«Долг»",
+  "«Свобода»",
+  "«Чистое небо»",
+  "Учёные",
+  "Наёмники",
+  "Военные",
+  "Бандиты",
+  "«Монолит»"
+];
+
+const relationRows = [
+  { label: "Отношение", values: [1, 0, 0, 2, 3, 0, -150, -330, 0], summary: true },
+  { label: "Одиночки", values: [300, 0, 0, 0, 0, -2000, -2000, -2000, -2000] },
+  { label: "«Долг»", values: [0, 300, -2000, -2000, 0, -2000, 0, -2000, -2000] },
+  { label: "«Свобода»", values: [0, -2000, 300, 0, 0, 0, -2000, 0, -2000] },
+  { label: "«Чистое небо»", values: [0, -2000, 0, 300, 0, 0, -2000, -2000, -2000] },
+  { label: "Учёные", values: [0, 0, 0, 0, 300, 0, 0, -2000, -2000] },
+  { label: "Наёмники", values: [-2000, -2000, 0, 0, 0, 300, -2000, 0, -2000] },
+  { label: "Военные", values: [-2000, 0, -2000, -2000, 0, -2000, 300, -2000, -2000] },
+  { label: "Бандиты", values: [-2000, -2000, 0, -2000, -2000, 0, -2000, 300, -2000] },
+  { label: "«Монолит»", values: [-2000, -2000, -2000, -2000, -2000, -2000, -2000, -2000, 2000] }
+];
+
+const guideSections = {
+  anomalies: {
+    label: "Аномалии",
+    items: [
+      {
+        id: "zharka",
+        title: "«Жарка»",
+        aliases: "термический очаг",
+        type: "Термическая аномалия",
+        threat: "высокая",
+        paragraphs: [
+          "Локальный тепловой разрыв, заметный по дрожанию воздуха, обугленной траве и резкому подъему температуры у поверхности.",
+          "При контакте наносит тяжелые ожоги. В темноте иногда виден слабый оранжевый отблеск, но днем обнаруживается хуже.",
+          "Перед пересечением маршрута рекомендуется проверять сектор болтами и обходить любые пятна с сухой травой или копотью."
+        ]
+      },
+      {
+        id: "electra",
+        title: "«Электра»",
+        aliases: "электрический разряд",
+        type: "Электрическая аномалия",
+        threat: "высокая",
+        paragraphs: [
+          "Скопление нестабильного электрического поля. Проявляется сухим треском, вспышками и помехами в наушниках.",
+          "Металлические предметы рядом с очагом могут искрить. Попадание внутрь зоны поражения вызывает мощный разряд.",
+          "На открытой местности заметна лучше после дождя и в сумерках. Без детектора к ней лучше не приближаться."
+        ]
+      },
+      {
+        id: "kisel",
+        title: "«Кисель»",
+        aliases: "студень / холодец",
+        type: "Химическая аномалия",
+        threat: "средняя",
+        paragraphs: [
+          "Ядовитое образование, похожее на светящуюся зеленую жижу. Часто встречается в низинах, подвалах и влажных помещениях.",
+          "При контакте разъедает ткань, кожу и фильтры снаряжения. Вокруг очага часто ощущается кисловатый запах.",
+          "Сталкеры обходят такие зоны по сухим участкам, не наступая в лужи и не касаясь подозрительной растительности."
+        ]
+      },
+      {
+        id: "gravi",
+        title: "Гравиконцентрат",
+        aliases: "локальное сжатие",
+        type: "Гравитационная аномалия",
+        threat: "критическая",
+        paragraphs: [
+          "Зона резкого гравитационного давления. Внешне может выглядеть почти пустой, но искажает пыль, листву и мелкий мусор.",
+          "Попадание внутрь приводит к сильному сдавливанию и травмам. Иногда рядом возникают вторичные вихри меньшей силы.",
+          "Безопасный проход возможен только после проверки болтами и при большом запасе дистанции."
+        ]
+      },
+      {
+        id: "springboard",
+        title: "«Трамплин»",
+        aliases: "ударная волна",
+        type: "Гравитационная аномалия",
+        threat: "средняя",
+        paragraphs: [
+          "Одна из самых распространенных аномалий. Срабатывает как невидимая пружина, отбрасывая тело или предмет резким импульсом.",
+          "Обнаруживается по искажению воздуха, круговым пятнам на земле и реакции брошенного болта.",
+          "Опасность зависит от окружения: на открытом месте можно отделаться ушибами, возле стен и арматуры часто смертельна."
+        ]
+      }
+    ]
   },
-  bandits: {
-    status: "враждебно",
-    title: "Бандиты",
-    text: "Грабят слабых, контролируют нелегальные маршруты и продают все, что удается вынести из опасных мест.",
-    threat: "71%",
-    zone: "склады",
-    image: "assets/faction-bandits.png",
-    alt: "Бандиты у склада"
-  },
-  military: {
-    status: "контроль",
-    title: "Военные",
-    text: "Охраняют дороги, патрулируют периметр и перекрывают доступ туда, где каждый шаг может закончиться задержанием.",
-    threat: "68%",
-    zone: "периметр",
-    image: "assets/faction-military.png",
-    alt: "Военный блокпост"
-  },
-  freedom: {
-    status: "переменно",
-    title: "Свобода",
-    text: "Сторонники открытой зоны. Считают, что ее нельзя запереть навсегда, и хотят изучать без диктата и запретов.",
-    threat: "54%",
-    zone: "север",
-    image: "assets/faction-freedom.png",
-    alt: "Лагерь Свободы"
-  },
-  duty: {
-    status: "строго",
-    title: "Долг",
-    text: "Дисциплинированная сила, которая считает зону угрозой и стремится сдерживать ее любой ценой.",
-    threat: "64%",
-    zone: "бар",
-    image: "assets/faction-duty.png",
-    alt: "Бойцы Долга"
-  },
-  monolith: {
-    status: "неизвестно",
-    title: "Монолит",
-    text: "Замкнутая группа у центра зоны. Их мотивы туманны, а присутствие ощущается как предупреждение.",
-    threat: "96%",
-    zone: "центр",
-    image: "assets/faction-monolith.png",
-    alt: "Монолит в темном зале"
+  groups: {
+    label: "Группировки",
+    items: [
+      {
+        id: "loners",
+        title: "Одиночки",
+        aliases: "вольные сталкеры / нейтралы",
+        type: "Свободные сталкеры",
+        threat: "переменная",
+        paragraphs: [
+          "Сталкеры, не входящие в крупные группировки. Действуют поодиночке или малыми группами, живут хабаром, проводкой и слухами.",
+          "Среди одиночек встречаются новички, опытные проводники и люди, которые просто не хотят подчиняться чужой идеологии.",
+          "Чаще держат нейтралитет, но отношение зависит от района, репутации и того, кто первым достал оружие."
+        ]
+      },
+      {
+        id: "duty",
+        title: "«Долг»",
+        aliases: "военизированная группировка",
+        type: "Организованная сила",
+        threat: "высокая",
+        paragraphs: [
+          "Дисциплинированная группировка, считающая Зону угрозой, которую необходимо сдерживать и уничтожать.",
+          "Хорошо вооружены, держат посты и стараются контролировать опасные направления. Часто конфликтуют со «Свободой».",
+          "К одиночкам обычно относятся прагматично, если те не мешают операциям и не нарушают установленный порядок."
+        ]
+      },
+      {
+        id: "freedom",
+        title: "«Свобода»",
+        aliases: "анархисты Зоны",
+        type: "Идеологическая группировка",
+        threat: "средняя",
+        paragraphs: [
+          "Сторонники открытой Зоны. Считают, что ее нельзя закрыть военными кордонами и бюрократическими запретами.",
+          "Конфликтуют с «Долгом» и армейскими подразделениями. Ценят независимость, информацию и доступ к территориям.",
+          "Отношение к одиночкам чаще нейтральное, особенно если те не работают на военных."
+        ]
+      },
+      {
+        id: "clearsky",
+        title: "«Чистое небо»",
+        aliases: "исследователи болот",
+        type: "Научно-полевая группа",
+        threat: "средняя",
+        paragraphs: [
+          "Закрытая группа исследователей и бойцов, пытающихся понять природу Зоны и причины ее нестабильности.",
+          "Предпочитают наблюдение и сбор данных, но при угрозе способны действовать жестко и организованно.",
+          "Их маршруты часто проходят через труднодоступные участки, где чужаки редко задерживаются надолго."
+        ]
+      },
+      {
+        id: "scientists",
+        title: "Учёные",
+        aliases: "экспедиционные группы",
+        type: "Исследовательский персонал",
+        threat: "низкая",
+        paragraphs: [
+          "Специалисты, изучающие аномалии, артефакты и радиационные изменения. Обычно работают под охраной.",
+          "Сами редко вступают в бой, но рядом с ними могут быть наемники, военные или охранные группы.",
+          "Платят за данные, образцы и сопровождение, поэтому для сталкеров часто являются источником работы."
+        ]
+      },
+      {
+        id: "mercs",
+        title: "Наёмники",
+        aliases: "контрактные отряды",
+        type: "Профессиональные бойцы",
+        threat: "высокая",
+        paragraphs: [
+          "Вооруженные группы, работающие по контракту. Их заказчики и цели обычно неизвестны.",
+          "Хорошо экипированы, действуют быстро и редко вступают в переговоры без выгоды.",
+          "Встреча с ними вне нейтральной территории считается серьезным риском."
+        ]
+      },
+      {
+        id: "military",
+        title: "Военные",
+        aliases: "армейский контроль",
+        type: "Государственные силы",
+        threat: "высокая",
+        paragraphs: [
+          "Подразделения, охраняющие периметр, дороги и важные объекты. Их задача - ограничивать доступ и контролировать перемещение.",
+          "Для нелегальных сталкеров чаще являются угрозой, особенно возле блокпостов и закрытых секторов.",
+          "Иногда вступают во временные сделки, но доверять таким договоренностям опасно."
+        ]
+      },
+      {
+        id: "bandits",
+        title: "Бандиты",
+        aliases: "криминальные группы",
+        type: "Враждебная группировка",
+        threat: "высокая",
+        paragraphs: [
+          "Разрозненные криминальные отряды, живущие грабежом, контролем троп и торговлей сомнительным хабаром.",
+          "Слабых сталкеров стараются запугать или обобрать. Между собой часто конфликтуют за склады и маршруты.",
+          "Переговоры возможны, но почти всегда проходят с оружием наготове."
+        ]
+      },
+      {
+        id: "monolith",
+        title: "«Монолит»",
+        aliases: "центр Зоны",
+        type: "Фанатичная группировка",
+        threat: "критическая",
+        paragraphs: [
+          "Замкнутая и крайне опасная группировка, связанная с центром Зоны. Их мотивы непонятны, а переговоры почти невозможны.",
+          "Бойцы «Монолита» действуют фанатично, хорошо знают свои позиции и редко отступают.",
+          "Контакт с ними считается одним из самых опасных сценариев для любой группы сталкеров."
+        ]
+      }
+    ]
   }
 };
 
@@ -145,7 +294,7 @@ const tabTasks = {
   map: "Оперативная сводка: сектор ЧАЭС под наблюдением",
   archive: "Архивный статус: часть записей повреждена",
   relations: "Разведсводка: фракционные данные обновлены",
-  anomalies: "Полевой справочник: активность аномалий нестабильна",
+  anomalies: "Справочник: запись открыта в полевом архиве",
   gear: "Инвентарный статус: часть изображений утрачена",
   radio: "Радиоканал: частота 104.7 принимает обрывки связи"
 };
@@ -190,13 +339,17 @@ const fileButtons = document.querySelectorAll(".file-button");
 const recordState = document.querySelector("#recordState");
 const recordTitle = document.querySelector("#recordTitle");
 const recordText = document.querySelector("#recordText");
-const relationButtons = document.querySelectorAll(".relation-button");
-const factionImage = document.querySelector("#factionImage");
-const factionStatus = document.querySelector("#factionStatus");
-const factionTitle = document.querySelector("#factionTitle");
-const factionText = document.querySelector("#factionText");
-const factionThreat = document.querySelector("#factionThreat");
-const factionZone = document.querySelector("#factionZone");
+const relationMatrix = document.querySelector("#relationMatrix");
+const relationModeToggle = document.querySelector("#relationModeToggle");
+const relationModeText = document.querySelector("#relationModeText");
+const guideCategoryButtons = document.querySelectorAll(".guide-category-button");
+const guideItemList = document.querySelector("#guideItemList");
+const guideImage = document.querySelector("#guideImage");
+const guideTitle = document.querySelector("#guideTitle");
+const guideAlias = document.querySelector("#guideAlias");
+const guideType = document.querySelector("#guideType");
+const guideThreat = document.querySelector("#guideThreat");
+const guideBody = document.querySelector("#guideBody");
 const radioLog = document.querySelector("#radioLog");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const hasGsap = typeof window.gsap !== "undefined";
@@ -216,6 +369,9 @@ let radiationLevel = 0.42;
 let signalLevel = 31;
 let bootTimeline;
 let audioUnlockSound;
+let relationMode = "text";
+let activeGuideSection = "anomalies";
+let activeGuideItem = "zharka";
 
 window.addEventListener("load", () => {
   updateClock();
@@ -291,26 +447,45 @@ fileButtons.forEach((button) => {
   });
 });
 
-relationButtons.forEach((button) => {
+renderRelationMatrix();
+renderGuide();
+
+relationModeToggle.addEventListener("click", () => {
+  if (!isPoweredOn) {
+    return;
+  }
+
+  relationMode = relationMode === "text" ? "values" : "text";
+  renderRelationMatrix();
+  triggerDataCorruption();
+  playMapTick();
+});
+
+guideCategoryButtons.forEach((button) => {
   button.addEventListener("click", () => {
     if (!isPoweredOn) {
       return;
     }
 
-    const faction = factions[button.dataset.faction];
-
-    relationButtons.forEach((item) => item.classList.remove("active"));
-    button.classList.add("active");
-
-    factionStatus.textContent = faction.status;
-    factionTitle.textContent = faction.title;
-    factionText.textContent = faction.text;
-    factionThreat.textContent = faction.threat;
-    factionZone.textContent = faction.zone;
-    factionImage.src = faction.image;
-    factionImage.alt = faction.alt;
+    activeGuideSection = button.dataset.guideSection;
+    activeGuideItem = guideSections[activeGuideSection].items[0].id;
+    renderGuide();
+    triggerDataCorruption();
     playMapTick();
   });
+});
+
+guideItemList.addEventListener("click", (event) => {
+  const button = event.target.closest(".guide-entry-button");
+
+  if (!button || !isPoweredOn) {
+    return;
+  }
+
+  activeGuideItem = button.dataset.guideItem;
+  renderGuide();
+  triggerDataCorruption();
+  playMapTick();
 });
 
 soundToggle.addEventListener("click", async () => {
@@ -509,6 +684,153 @@ function setActiveTab(tabName) {
 
   if (tabName === "radio") {
     addRadioMessage();
+  }
+}
+
+function renderRelationMatrix() {
+  relationMatrix.replaceChildren();
+  relationModeText.textContent = relationMode === "text" ? "Показ значений" : "Показ текста";
+  relationModeToggle.setAttribute("aria-pressed", String(relationMode === "values"));
+
+  const thead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  const emptyHeader = document.createElement("th");
+
+  emptyHeader.scope = "col";
+  emptyHeader.textContent = "";
+  headerRow.append(emptyHeader);
+
+  relationColumns.forEach((column) => {
+    const th = document.createElement("th");
+    th.scope = "col";
+    th.textContent = column;
+    headerRow.append(th);
+  });
+
+  thead.append(headerRow);
+  relationMatrix.append(thead);
+
+  const tbody = document.createElement("tbody");
+
+  relationRows.forEach((row) => {
+    const tr = document.createElement("tr");
+    const rowHeader = document.createElement("th");
+
+    rowHeader.scope = "row";
+    rowHeader.textContent = row.label;
+    tr.append(rowHeader);
+
+    row.values.forEach((value) => {
+      const td = document.createElement("td");
+      const state = getRelationState(value, row.summary);
+
+      td.dataset.state = state;
+      td.textContent = relationMode === "values" ? String(value) : getRelationLabel(value, row.summary);
+      tr.append(td);
+    });
+
+    tbody.append(tr);
+  });
+
+  relationMatrix.append(tbody);
+
+  if (motion) {
+    motion.fromTo(
+      relationMatrix.querySelectorAll("td"),
+      { autoAlpha: 0, y: 3 },
+      { autoAlpha: 1, y: 0, duration: 0.18, stagger: 0.006, ease: "power1.out" }
+    );
+  }
+}
+
+function getRelationState(value, isSummary) {
+  if (value >= 1800) {
+    return "friend";
+  }
+
+  if (value >= 900) {
+    return "good";
+  }
+
+  if (value < 0 || (isSummary && value === 0)) {
+    return "enemy";
+  }
+
+  return "neutral";
+}
+
+function getRelationLabel(value, isSummary) {
+  if (value >= 1800) {
+    return "друг";
+  }
+
+  if (value >= 1400) {
+    return "Хорош.";
+  }
+
+  if (value >= 900) {
+    return "Норм.";
+  }
+
+  if (value > 0) {
+    return isSummary ? "Обычн." : "нейтрал";
+  }
+
+  if (value < 0 || isSummary) {
+    return isSummary ? "Миним." : "враг";
+  }
+
+  return "нейтрал";
+}
+
+function renderGuide() {
+  const section = guideSections[activeGuideSection] || guideSections.anomalies;
+  const selectedItem = section.items.find((item) => item.id === activeGuideItem) || section.items[0];
+
+  activeGuideItem = selectedItem.id;
+  guideCategoryButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.guideSection === activeGuideSection);
+  });
+
+  guideItemList.replaceChildren();
+
+  section.items.forEach((item) => {
+    const button = document.createElement("button");
+
+    button.className = "guide-entry-button";
+    button.classList.toggle("active", item.id === activeGuideItem);
+    button.type = "button";
+    button.dataset.guideItem = item.id;
+    button.textContent = item.title;
+    guideItemList.append(button);
+  });
+
+  guideImage.src = "assets/nodata.png";
+  guideImage.alt = `NO DATA / ${selectedItem.title}`;
+  guideTitle.textContent = selectedItem.title;
+  guideAlias.textContent = selectedItem.aliases;
+  guideType.textContent = selectedItem.type;
+  guideThreat.textContent = selectedItem.threat;
+  guideBody.replaceChildren();
+
+  selectedItem.paragraphs.forEach((paragraph, index) => {
+    if (index === 0) {
+      const heading = document.createElement("h2");
+      heading.textContent = "Информация";
+      guideBody.append(heading);
+    }
+
+    const p = document.createElement("p");
+    p.textContent = paragraph;
+    guideBody.append(p);
+  });
+
+  if (motion) {
+    motion.fromTo(
+      [guideImage, guideTitle, guideBody],
+      { autoAlpha: 0, y: 6 },
+      { autoAlpha: 1, y: 0, duration: 0.22, stagger: 0.035, ease: "power1.out" }
+    );
   }
 }
 

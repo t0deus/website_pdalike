@@ -52,7 +52,7 @@
           <button class="tab-button active" type="button" data-tab="map">Карта</button>
           <button class="tab-button" type="button" data-tab="archive">Архив</button>
           <button class="tab-button" type="button" data-tab="relations">Фракции</button>
-          <button class="tab-button" type="button" data-tab="anomalies">Аномалии</button>
+          <button class="tab-button" type="button" data-tab="anomalies">Справочник</button>
           <button class="tab-button" type="button" data-tab="gear">Снаряжение</button>
           <button class="tab-button" type="button" data-tab="radio">Радио</button>
         </nav>
@@ -153,7 +153,7 @@
                 <button class="file-button" type="button" data-record="exclusion">зона отчуждения</button>
               </nav>
               <article class="record-viewer">
-                <img src="assets/no-data.svg" alt="NO DATA" class="no-data-img">
+                <img src="assets/nodata.png" alt="NO DATA" class="no-data-img">
                 <div>
                   <span class="record-state" id="recordState">record damaged</span>
                   <h2 id="recordTitle">Испытание турбогенератора</h2>
@@ -171,34 +171,30 @@
             <div class="panel-title-row">
               <div>
                 <p class="panel-kicker">Relations</p>
-                <h1 id="tab-relations-title">Фракции</h1>
+                <h1 id="tab-relations-title">Отношения</h1>
               </div>
               <div class="panel-readout">
-                <span>протокол</span>
-                <strong>field intel</strong>
+                <span>таблица</span>
+                <strong>relation grid</strong>
               </div>
             </div>
-            <div class="relations-layout">
-              <nav class="relation-list" aria-label="Список фракций">
-                <button class="relation-button active" type="button" data-faction="stalkers">Сталкеры</button>
-                <button class="relation-button" type="button" data-faction="bandits">Бандиты</button>
-                <button class="relation-button" type="button" data-faction="military">Военные</button>
-                <button class="relation-button" type="button" data-faction="freedom">Свобода</button>
-                <button class="relation-button" type="button" data-faction="duty">Долг</button>
-                <button class="relation-button" type="button" data-faction="monolith">Монолит</button>
-              </nav>
-              <article class="faction-dossier">
-                <img src="assets/faction-stalkers.png" alt="Сталкеры в зоне" class="faction-image" id="factionImage">
-                <div class="dossier-body">
-                  <span class="record-state" id="factionStatus">нейтрально</span>
-                  <h2 id="factionTitle">Сталкеры</h2>
-                  <p id="factionText">Одиночки, проводники и охотники за редкими находками. Живут слухами, тайниками и осторожностью.</p>
-                  <div class="stat-grid">
-                    <span><strong id="factionThreat">42%</strong> угроза</span>
-                    <span><strong id="factionZone">кордон</strong> зона</span>
-                  </div>
-                </div>
-              </article>
+            <div class="relations-board">
+              <div class="relations-toolbar">
+                <span>Отношения группировок</span>
+                <button class="relation-mode-toggle" id="relationModeToggle" type="button" aria-pressed="false">
+                  <span class="toggle-arrow" aria-hidden="true"></span>
+                  <span id="relationModeText">Показ значений</span>
+                </button>
+              </div>
+              <div class="relation-matrix-wrap">
+                <table class="relation-matrix" id="relationMatrix" aria-label="Таблица отношений группировок"></table>
+              </div>
+              <div class="relation-legend" aria-hidden="true">
+                <span data-state="friend">друг</span>
+                <span data-state="good">норм.</span>
+                <span data-state="neutral">нейтрал</span>
+                <span data-state="enemy">враг</span>
+              </div>
             </div>
           </section>
 
@@ -206,37 +202,27 @@
             <div class="panel-title-row">
               <div>
                 <p class="panel-kicker">Guide</p>
-                <h1 id="tab-anomalies-title">Аномалии</h1>
+                <h1 id="tab-anomalies-title">Справочник</h1>
               </div>
               <div class="panel-readout">
-                <span>детектор</span>
-                <strong>unstable</strong>
+                <span>архив</span>
+                <strong>field manual</strong>
               </div>
             </div>
-            <div class="anomaly-grid">
-              <article class="anomaly-card">
-                <img src="assets/no-data.svg" alt="NO DATA">
-                <h2>Электра</h2>
-                <p>Световые вспышки, сухой треск в наушниках и резкий запах озона.</p>
-                <span>угроза: высокая</span>
-              </article>
-              <article class="anomaly-card">
-                <img src="assets/no-data.svg" alt="NO DATA">
-                <h2>Жарка</h2>
-                <p>Воздух дрожит, трава обуглена, металл нагревается даже без огня.</p>
-                <span>угроза: высокая</span>
-              </article>
-              <article class="anomaly-card">
-                <img src="assets/no-data.svg" alt="NO DATA">
-                <h2>Карусель</h2>
-                <p>Гравитационный вихрь поднимает мусор и ломает траекторию движения.</p>
-                <span>угроза: критическая</span>
-              </article>
-              <article class="anomaly-card">
-                <img src="assets/no-data.svg" alt="NO DATA">
-                <h2>Пси-поле</h2>
-                <p>Головная боль, шум в радиоэфире, потеря ориентации и паника.</p>
-                <span>угроза: неизвестна</span>
+            <div class="guide-layout">
+              <nav class="guide-categories" aria-label="Разделы справочника">
+                <button class="guide-category-button active" type="button" data-guide-section="anomalies">Аномалии</button>
+                <button class="guide-category-button" type="button" data-guide-section="groups">Группировки</button>
+              </nav>
+              <nav class="guide-entry-list" id="guideItemList" aria-label="Записи справочника"></nav>
+              <article class="guide-article">
+                <img src="assets/nodata.png" alt="NO DATA" id="guideImage">
+                <div class="guide-meta">
+                  <p>• Название: <strong id="guideTitle">«Жарка»</strong> / <span id="guideAlias">термический очаг</span></p>
+                  <p>• Тип: <span id="guideType">Термическая аномалия</span></p>
+                  <p>• Угроза: <span id="guideThreat">высокая</span></p>
+                </div>
+                <div class="guide-body" id="guideBody"></div>
               </article>
             </div>
           </section>
@@ -255,35 +241,35 @@
             <div class="inventory-grid">
               <article class="gear-card gear-dosimeter">
                 <span>01</span>
-                <img src="assets/no-data.svg" alt="NO DATA" class="gear-thumb">
+                <img src="assets/nodata.png" alt="NO DATA" class="gear-thumb">
                 <strong>Дозиметр</strong>
                 <p>фон, импульсы, предупреждение</p>
               </article>
               <article class="gear-card gear-mask">
                 <span>02</span>
-                <img src="assets/no-data.svg" alt="NO DATA" class="gear-thumb">
+                <img src="assets/nodata.png" alt="NO DATA" class="gear-thumb">
                 <strong>Противогаз</strong>
                 <p>пыль, аэрозоли, химические пятна</p>
               </article>
               <article class="gear-card gear-bolts">
                 <span>03</span>
-                <img src="assets/no-data.svg" alt="NO DATA" class="gear-thumb">
+                <img src="assets/nodata.png" alt="NO DATA" class="gear-thumb">
                 <strong>Болты</strong>
                 <p>проверка аномалий на маршруте</p>
               </article>
               <article class="gear-card gear-medkit">
                 <span>04</span>
-                <img src="assets/no-data.svg" alt="NO DATA" class="gear-thumb">
+                <img src="assets/nodata.png" alt="NO DATA" class="gear-thumb">
                 <strong>Аптечка</strong>
                 <p>первая помощь и антирад</p>
               </article>
               <article class="gear-card gear-detector">
                 <span>05</span>
-                <img src="assets/no-data.svg" alt="NO DATA" class="gear-thumb">
+                <img src="assets/nodata.png" alt="NO DATA" class="gear-thumb">
                 <strong>Детектор</strong>
                 <p>поиск артефактов и активных полей</p>
               </article>
-              <article class="empty-slot"><img src="assets/no-data.svg" alt="NO DATA"></article>
+              <article class="empty-slot"><img src="assets/nodata.png" alt="NO DATA"></article>
             </div>
           </section>
 

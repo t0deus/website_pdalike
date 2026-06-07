@@ -1147,8 +1147,6 @@ p {
 
 .intel-card,
 .record-viewer,
-.faction-dossier,
-.anomaly-card,
 .inventory-grid article,
 .radio-log {
   border: 1px solid rgba(132, 154, 112, 0.26);
@@ -1230,8 +1228,7 @@ p {
   text-transform: uppercase;
 }
 
-.split-console,
-.relations-layout {
+.split-console {
   display: grid;
   grid-template-columns: minmax(12rem, 0.36fr) minmax(0, 1fr);
   gap: 0.9rem;
@@ -1239,16 +1236,14 @@ p {
   flex: 1;
 }
 
-.file-list,
-.relation-list {
+.file-list {
   display: grid;
   align-content: start;
   gap: 0.45rem;
   overflow: auto;
 }
 
-.file-button,
-.relation-button {
+.file-button {
   padding: 0.75rem 0.85rem;
   border: 1px solid rgba(132, 154, 112, 0.22);
   border-radius: 5px;
@@ -1263,18 +1258,325 @@ p {
 
 .file-button:hover,
 .file-button:focus-visible,
-.file-button.active,
-.relation-button:hover,
-.relation-button:focus-visible,
-.relation-button.active {
+.file-button.active {
   border-color: var(--line-bright);
   background: rgba(54, 71, 43, 0.58);
   color: #fff8d9;
   outline: none;
 }
 
-.record-viewer,
-.faction-dossier {
+.relations-board {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  border: 1px solid rgba(132, 154, 112, 0.24);
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgba(185, 215, 102, 0.025), transparent 10rem),
+    rgba(2, 6, 4, 0.72);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.54);
+  overflow: hidden;
+}
+
+.relations-toolbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid rgba(132, 154, 112, 0.22);
+  color: rgba(221, 217, 201, 0.44);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.relations-toolbar > span {
+  grid-column: 2;
+  text-align: center;
+}
+
+.relation-mode-toggle {
+  grid-column: 3;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.15rem;
+  padding: 0.25rem 0.55rem 0.25rem 0.25rem;
+  border: 1px solid rgba(221, 217, 201, 0.22);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.28);
+  color: rgba(221, 217, 201, 0.58);
+  cursor: pointer;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.relation-mode-toggle:hover,
+.relation-mode-toggle:focus-visible,
+.relation-mode-toggle[aria-pressed="true"] {
+  border-color: rgba(185, 215, 102, 0.48);
+  color: #fff8d9;
+  outline: none;
+}
+
+.toggle-arrow {
+  position: relative;
+  display: grid;
+  width: 1.65rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgba(221, 217, 201, 0.14);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.toggle-arrow::before {
+  width: 0;
+  height: 0;
+  border-top: 0.42rem solid transparent;
+  border-bottom: 0.42rem solid transparent;
+  border-left: 0.58rem solid rgba(221, 217, 201, 0.48);
+  content: "";
+}
+
+.relation-matrix-wrap {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+}
+
+.relation-matrix {
+  width: 100%;
+  min-width: 66rem;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: rgba(221, 217, 201, 0.5);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.82rem;
+  line-height: 1.1;
+}
+
+.relation-matrix th,
+.relation-matrix td {
+  height: 2.6rem;
+  border: 1px solid rgba(132, 154, 112, 0.2);
+  background: rgba(0, 0, 0, 0.18);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.relation-matrix thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border-top: 0;
+  background: rgba(5, 8, 6, 0.96);
+  color: rgba(221, 217, 201, 0.48);
+  font-weight: 800;
+}
+
+.relation-matrix th:first-child {
+  width: 8.2rem;
+}
+
+.relation-matrix tbody th {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  padding: 0 0.75rem;
+  background: rgba(5, 8, 6, 0.96);
+  color: rgba(221, 217, 201, 0.48);
+  font-weight: 800;
+  text-align: right;
+}
+
+.relation-matrix td {
+  color: #b1ad00;
+  font-weight: 800;
+}
+
+.relation-matrix td[data-state="friend"] {
+  color: #4caf1f;
+}
+
+.relation-matrix td[data-state="good"] {
+  color: #c4d94e;
+}
+
+.relation-matrix td[data-state="neutral"] {
+  color: #b1ad00;
+}
+
+.relation-matrix td[data-state="enemy"] {
+  color: #e00000;
+}
+
+.relation-legend {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-top: 1px solid rgba(132, 154, 112, 0.18);
+  color: rgba(221, 217, 201, 0.42);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.relation-legend span::before {
+  display: inline-block;
+  width: 0.48rem;
+  aspect-ratio: 1;
+  margin-right: 0.34rem;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+}
+
+.relation-legend span[data-state="friend"] {
+  color: #4caf1f;
+}
+
+.relation-legend span[data-state="good"] {
+  color: #c4d94e;
+}
+
+.relation-legend span[data-state="neutral"] {
+  color: #b1ad00;
+}
+
+.relation-legend span[data-state="enemy"] {
+  color: #e00000;
+}
+
+.guide-layout {
+  display: grid;
+  grid-template-columns: minmax(9rem, 0.22fr) minmax(12rem, 0.34fr) minmax(0, 1fr);
+  flex: 1;
+  min-height: 0;
+  border: 1px solid rgba(132, 154, 112, 0.24);
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgba(185, 215, 102, 0.025), transparent 11rem),
+    rgba(2, 6, 4, 0.72);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.54);
+  overflow: hidden;
+}
+
+.guide-categories,
+.guide-entry-list {
+  display: grid;
+  align-content: start;
+  min-height: 0;
+  border-right: 1px solid rgba(132, 154, 112, 0.22);
+  overflow: auto;
+}
+
+.guide-category-button,
+.guide-entry-button {
+  min-height: 2rem;
+  padding: 0.32rem 0.55rem;
+  border: 0;
+  border-bottom: 1px solid rgba(132, 154, 112, 0.08);
+  background: transparent;
+  color: rgba(221, 217, 201, 0.48);
+  cursor: pointer;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-align: left;
+}
+
+.guide-category-button:hover,
+.guide-category-button:focus-visible,
+.guide-category-button.active,
+.guide-entry-button:hover,
+.guide-entry-button:focus-visible,
+.guide-entry-button.active {
+  background: rgba(221, 217, 201, 0.075);
+  color: rgba(240, 235, 216, 0.78);
+  outline: none;
+}
+
+.guide-category-button.active {
+  border-left: 2px solid rgba(185, 215, 102, 0.55);
+  color: rgba(185, 215, 102, 0.78);
+}
+
+.guide-entry-button.active {
+  color: #fff8d9;
+}
+
+.guide-article {
+  min-height: 0;
+  padding: 0.85rem;
+  overflow: auto;
+}
+
+.guide-article img {
+  display: block;
+  width: min(38rem, 100%);
+  height: clamp(12rem, 32vh, 18.5rem);
+  margin-bottom: 0.65rem;
+  border: 1px solid rgba(132, 154, 112, 0.18);
+  background: #020403;
+  object-fit: cover;
+  filter: saturate(0.82) contrast(1.05) brightness(0.72);
+}
+
+.guide-meta {
+  margin-bottom: 1rem;
+  color: rgba(221, 217, 201, 0.52);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.guide-meta p {
+  margin: 0.16rem 0;
+  color: inherit;
+  line-height: 1.35;
+}
+
+.guide-meta strong,
+.guide-meta span {
+  color: rgba(89, 168, 157, 0.92);
+}
+
+.guide-meta p:nth-child(2) span {
+  color: var(--amber);
+}
+
+.guide-meta p:nth-child(3) span {
+  color: var(--green);
+}
+
+.guide-body h2 {
+  margin-bottom: 0.35rem;
+  color: rgba(71, 157, 76, 0.9);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.92rem;
+  line-height: 1.2;
+  text-transform: none;
+}
+
+.guide-body p {
+  max-width: 54rem;
+  margin-bottom: 0.95rem;
+  color: rgba(221, 217, 201, 0.5);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.record-viewer {
   display: grid;
   grid-template-columns: minmax(14rem, 0.46fr) minmax(0, 1fr);
   gap: 1rem;
@@ -1283,8 +1585,7 @@ p {
   overflow: auto;
 }
 
-.no-data-img,
-.faction-image {
+.no-data-img {
   width: 100%;
   height: 100%;
   min-height: 16rem;
@@ -1294,13 +1595,7 @@ p {
   background: #020403;
 }
 
-.faction-image {
-  filter: saturate(0.82) contrast(1.05) brightness(0.82);
-  object-position: center;
-}
-
-.record-viewer > div,
-.dossier-body {
+.record-viewer > div {
   align-self: center;
 }
 
@@ -1309,7 +1604,6 @@ p {
   margin-bottom: 0.8rem;
 }
 
-.anomaly-grid,
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1319,13 +1613,11 @@ p {
   overflow: auto;
 }
 
-.anomaly-card,
 .inventory-grid article {
   min-height: 16rem;
   padding: 0.8rem;
 }
 
-.anomaly-card img,
 .gear-thumb,
 .empty-slot img {
   display: block;
@@ -1342,12 +1634,10 @@ p {
   background: #020403;
 }
 
-.anomaly-card h2,
 .inventory-grid strong {
   font-size: 1.1rem;
 }
 
-.anomaly-card span,
 .inventory-grid span {
   display: inline-flex;
   margin-top: 0.7rem;
@@ -1592,14 +1882,21 @@ p {
   }
 
   .map-workspace,
-  .split-console,
-  .relations-layout {
+  .split-console {
     grid-template-columns: 1fr;
   }
 
-  .anomaly-grid,
   .inventory-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .guide-layout {
+    grid-template-columns: minmax(8rem, 0.36fr) minmax(11rem, 0.64fr);
+  }
+
+  .guide-article {
+    grid-column: 1 / -1;
+    border-top: 1px solid rgba(132, 154, 112, 0.22);
   }
 }
 
@@ -1647,12 +1944,45 @@ p {
     font-size: 0.58rem;
   }
 
-  .record-viewer,
-  .faction-dossier {
+  .relations-toolbar {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .relations-toolbar > span,
+  .relation-mode-toggle {
+    grid-column: auto;
+    justify-self: start;
+  }
+
+  .relation-matrix {
+    min-width: 58rem;
+    font-size: 0.72rem;
+  }
+
+  .guide-layout {
     grid-template-columns: 1fr;
   }
 
-  .anomaly-grid,
+  .guide-categories,
+  .guide-entry-list {
+    max-height: 9rem;
+    border-right: 0;
+    border-bottom: 1px solid rgba(132, 154, 112, 0.22);
+  }
+
+  .guide-article {
+    grid-column: auto;
+  }
+
+  .guide-article img {
+    height: 11rem;
+  }
+
+  .record-viewer {
+    grid-template-columns: 1fr;
+  }
+
   .inventory-grid,
   .stat-grid {
     grid-template-columns: 1fr;
